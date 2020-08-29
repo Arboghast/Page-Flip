@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sandbox</title>
+
+    <!-- Load Page-Flip Library-->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.0/dist/js/page-flip.browser.min.js"></script>
+
+    <!-- Load Mark.js for text highlighting-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+
+    <style>
+      .contain {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      .text {
+        font-family: minion-pro, serif;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 45px;
+      }
+
+      .red-highlight {
+        color: red;
+      }
+    </style>
+  </head>
+  <body style="overflow: hidden;">
+    <div id="book">
+      <div class="my-page"></div>
+      <div class="my-page">
+        <div class="contain">
+          <p id="special" class="text">
+            Sed placerat tempus urna, rhoncus pellentesque turpis consequat vel.
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+            per inceptos himenaeos.
+          </p>
+        </div>
+      </div>
+    </div>
+    <button id="button-1">Flip</button>
+    <button id="button-2">Highlight</button>
+  </body>
+  <script>
+    // or if you're using a script tag and page-flip.browser.js:
+    const pageFlip = new St.PageFlip(document.getElementById("book"), {
+      width: 880, // required parameter - base page width
+      height: 800,
+      startPage: 1,
+      useMouseEvents: false
+    });
+    pageFlip.loadFromHTML(document.querySelectorAll(".my-page"));
+
+    function flip() {
+      pageFlip.turnToPrevPage();
+      pageFlip.flipNext({ corner: "top" });
+    }
+    document.getElementById("button-1").setAttribute("onclick", "flip()");
+
+    const instance = new Mark(document.getElementById("special"));
+
+    let interval;
+    let index = 0;
+    let words= ["lorem", "class"];
+    let ranges = [{start: 0, length: 0, chars: 10},{start: 15, length: 0, chars: 25},{start: 50, length: 0, chars: 20}];
+
+
+    function startHighlighting() {
+      interval = setInterval(() => {
+        if (ranges[index]["length"] > ranges[index]["chars"]) {
+          index++;
+          if (index >= ranges.length) {
+            clearInterval(interval);
+          }
+        } else {
+          ranges[index]["length"] += 1;
+          highlight();
+        }
+      }, 50);
+    }
+
+    function highlight() {
+      instance.unmark();
+      instance.markRanges(ranges);
+      for (let i = 0; i < words.length; i++) {
+        instance.mark(words[i], { className: "red-highlight" });
+      }
+    }
+
+    document.getElementById("button-2").setAttribute("onclick", "startHighlighting()");
+  </script>
+</html>

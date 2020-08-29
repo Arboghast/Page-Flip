@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sandbox</title>
+
+    <!-- Load Page-Flip Library-->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.0/dist/js/page-flip.browser.min.js"></script>
+    <style>
+      /* #book{
+            width: 200vw;
+        } */
+      .contain {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        font-size: 35px;
+        text-align: center;
+      }
+
+      .text {
+        font-family: minion-pro, serif;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 45px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="book">
+      <div class="my-page"></div> 
+      <div class="my-page">
+        <div class="contain">
+          <p class="text">
+            Sed placerat tempus urna, rhoncus pellentesque turpis consequat vel.
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+            per inceptos himenaeos.
+          </p>
+        </div>
+      </div>
+    </div>
+    <button id="button-1">Flip</button>
+  </body>
+  <script>
+    // or if you're using a script tag and page-flip.browser.js:
+    const pageFlip = new St.PageFlip(document.getElementById("book"), {
+      width: 800, // required parameter - base page width
+      height: 600,
+    });
+    pageFlip.loadFromHTML(document.querySelectorAll(".my-page"));
+
+    function flip() {
+      pageFlip.turnToPrevPage();
+      pageFlip.flipNext({ corner: "top" });
+    }
+    document.getElementById("button-1").setAttribute("onclick", "flip()");
+  </script>
+</html>
